@@ -1,0 +1,92 @@
+{
+  "GEMINI_TOOLS": [
+    {
+      "functionDeclarations": [
+        {
+          "name": "store_memory_from_text",
+          "description": "Store an important memory from the player's actions or story developments for future recall.",
+          "parameters": {
+            "type": "OBJECT",
+            "properties": {
+              "content": {
+                "type": "STRING",
+                "description": "The text content of the memory to store."
+              },
+              "entities": {
+                "type": "ARRAY",
+                "items": { "type": "STRING" },
+                "description": "Important entities (people, places, objects) mentioned in the content."
+              }
+            },
+            "required": ["content", "entities"]
+          }
+        },
+        {
+          "name": "retrieve_memories_by_entities",
+          "description": "Recall memories related to a list of entities.",
+          "parameters": {
+            "type": "OBJECT",
+            "properties": {
+              "entities": {
+                "type": "ARRAY",
+                "items": { "type": "STRING" },
+                "description": "Entities to search memories for."
+              },
+              "limit": {
+                "type": "INTEGER",
+                "description": "Maximum number of memories to return."
+              }
+            },
+            "required": ["entities", "limit"]
+          }
+        }
+      ]
+    }
+  ],
+  "GROQ_TOOLS": [
+    {
+      "type": "function",
+      "function": {
+        "name": "store_memory_from_text",
+        "description": "Store an important memory from the player's actions or story developments for future recall.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "content": {
+              "type": "string",
+              "description": "The text content of the memory to store."
+            },
+            "entities": {
+              "type": "array",
+              "items": { "type": "string" },
+              "description": "Important entities (people, places, objects) mentioned in the content."
+            }
+          },
+          "required": ["content", "entities"]
+        }
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "retrieve_memories_by_entities",
+        "description": "Recall memories related to a list of entities.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "entities": {
+              "type": "array",
+              "items": { "type": "string" },
+              "description": "Entities to search memories for."
+            },
+            "limit": {
+              "type": "integer",
+              "description": "Maximum number of memories to return."
+            }
+          },
+          "required": ["entities", "limit"]
+        }
+      }
+    }
+  ]
+}

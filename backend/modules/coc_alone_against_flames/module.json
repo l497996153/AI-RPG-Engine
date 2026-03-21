@@ -1,0 +1,27 @@
+{
+  "id": "coc-alone-against-flames",
+  "name": "Alone Against the Flames",
+  "system": "Call of Cthulhu 7th Edition",
+  "description": "A classic solo adventure set in the sinister 1920s village of Emberhead, New Hampshire. Players must uncover dark secrets and escape before the annual Beacon festival.",
+  "terminology": {
+    "gm_name": "Keeper of Arcane Lore",
+    "gm_short": "KP",
+    "player_name": "Investigator",
+    "welcome": { "zh": "欢迎来到克苏鲁的世界。", "en": "Welcome to the world of Cthulhu." },
+    "ready": { "zh": "调查员已就位.", "en": "Investigator is ready." },
+    "thinking": { "zh": "正在思考中", "en": "KP is thinking" },
+    "no_response": { "zh": "古神没有回应。", "en": "The Great Old One did not respond." },
+    "input_placeholder": { "zh": "你要做什么，调查员？", "en": "What will you do, Investigator?" },
+    "enter_room": { "zh": "进入克苏鲁的世界", "en": "Enter the World of Cthulhu" },
+    "death_message": { "zh": "你的角色已经死亡。请重新开始游戏。", "en": "Your character has died. Please restart the game." }
+  },
+  "game_schema": {
+    "bars": [
+      { "key": "hp", "max_key": "max_hp", "label": "HP", "color": "#4caf50" },
+      { "key": "san", "max_key": "max_san", "label": "SAN", "color": "#2196f3" }
+    ],
+    "attributes": ["STR", "CON", "SIZ", "DEX", "APP", "INT", "EDU", "POW", "LUK"],
+    "has_inventory": true,
+    "default_dice": "1d100"
+  }
+}

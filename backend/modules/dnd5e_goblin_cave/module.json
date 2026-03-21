@@ -1,0 +1,26 @@
+{
+  "id": "dnd5e-goblin-cave",
+  "name": "The Goblin Cave",
+  "system": "Dungeons & Dragons 5th Edition",
+  "description": "A short introductory adventure where a lone adventurer tracks a band of goblins to their hideout in a forest cave. Features combat, exploration, and social encounters using D&D 5e rules.",
+  "terminology": {
+    "gm_name": "Dungeon Master",
+    "gm_short": "DM",
+    "player_name": "Adventurer",
+    "welcome": { "zh": "欢迎来到被遗忘的国度。", "en": "Welcome to the Forgotten Realms." },
+    "ready": { "zh": "冒险者已准备就绪.", "en": "Adventurer is ready." },
+    "thinking": { "zh": "地下城主正在思考", "en": "DM is thinking" },
+    "no_response": { "zh": "命运之轮沉默了。", "en": "The Wheel of Fate is silent." },
+    "input_placeholder": { "zh": "你想做什么，冒险者？", "en": "What do you do, Adventurer?" },
+    "enter_room": { "zh": "踏入被遗忘的国度", "en": "Enter the Forgotten Realms" },
+    "death_message": { "zh": "你的冒险者已经倒下。请重新开始。", "en": "Your adventurer has fallen. Please restart." }
+  },
+  "game_schema": {
+    "bars": [
+      { "key": "hp", "max_key": "max_hp", "label": "HP", "color": "#4caf50" }
+    ],
+    "attributes": ["STR", "DEX", "CON", "INT", "WIS", "CHA"],
+    "has_inventory": true,
+    "default_dice": "1d20"
+  }
+}
