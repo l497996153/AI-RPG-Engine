@@ -53,7 +53,7 @@ API_CONFIGS = build_api_configs()
 app = FastAPI(title="AI-RPG-Engine")
 
 ALLOWED_ORIGINS = os.getenv(
-    "CORS_ORIGINS", "https://mytools-cyj.pages.dev"
+    "CORS_ORIGINS", "http://localhost:5173"
 ).split(",")
 
 app.add_middleware(
@@ -398,7 +398,7 @@ async def chat(req: ChatRequest):
             })
             await store_memory_from_text(client, session_memory, "system", f"Attached roll: {roll_json}", [])
 
-        MAX_ITERATIONS = 3
+        MAX_ITERATIONS = 100
         narrative = ""
         options = ""
 
@@ -441,9 +441,16 @@ async def chat(req: ChatRequest):
                             ],
                             "tools": GEMINI_TOOLS,
                         }
-                    else:
+                    elif config["name"] == "Groq":
                         payload = {
                             "model": groq_model or "llama-3.3-70b-versatile",
+                            "messages": full_messages,
+                            "tools": GROQ_TOOLS,
+                            "tool_choice": "auto",
+                        }
+                    else:
+                        payload = {
+                            "model": config.get("model", "llama3.1"),
                             "messages": full_messages,
                             "tools": GROQ_TOOLS,
                             "tool_choice": "auto",
