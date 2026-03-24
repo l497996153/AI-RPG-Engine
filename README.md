@@ -10,6 +10,10 @@ Designed to support **any Tabletop RPG** — stats, attributes, prompts, and gam
 
 Because the engine is entirely **schema-driven**, it is not limited to traditional tabletop RPGs. By simply modifying the `module.json` and prompts, the engine seamlessly transforms into a dynamic **Visual Novel / Galgame Engine**:
 
+## 🎮 Live Demo
+
+Experience the engine in action without any setup:
+👉 **[Playable Sample](https://mytools-cyj.pages.dev/vtt)**
 
 ## Architecture
 
