@@ -23,8 +23,8 @@ def build_api_configs(
     gemini_key = os.getenv("GEMINI_API_KEY")
     groq_key = os.getenv("GROQ_API_KEY")
     ollama_url = os.getenv("OLLAMA_API_URL")
-    g_model = gemini_model or os.getenv("GEMINI_MODEL", "gemini-2.0-flash-lite")
-    q_model = groq_model or os.getenv("GROQ_MODEL", "llama-3.3-70b-versatile")
+    g_model = gemini_model or os.getenv("GEMINI_MODEL", "gemini-3.1-flash-lite-preview")
+    q_model = groq_model or os.getenv("GROQ_MODEL", "moonshotai/kimi-k2-instruct-0905")
     o_model = ollama_model or os.getenv("OLLAMA_MODEL", "llama3.1")
 
     configs: list[dict] = []

@@ -113,7 +113,7 @@ def parse_state(content: str, room: Room, session_id: str | None = None) -> str:
         except Exception as e:
             sid = session_id or "unknown"
             print(f"DEBUG: Failed to parse [STATE] JSON for session {sid}: {e}")
-    return re.sub(r"\[STATE\][\s\S]*$", "", content).strip() if isinstance(content, str) else content
+    return content.split("[STATE]")[0].strip()
 
 
 def extract_data(content: str, room: Room, session_id: str | None = None) -> dict[str, str | None]:
@@ -123,17 +123,17 @@ def extract_data(content: str, room: Room, session_id: str | None = None) -> dic
     narrative = ""
     options = None
 
-    narrative_match = re.search(
-        r"\[NARRATIVE\]([\s\S]*?)(?=\[OPTIONS\]|\[STATE\]|$)", content, re.IGNORECASE
-    )
-    if narrative_match:
-        narrative = narrative_match.group(1).strip()
-
-    options_match = re.search(
-        r"\[OPTIONS\]([\s\S]*?)(?=\[STATE\]|$)", content, re.IGNORECASE
-    )
-    if options_match:
-        options = options_match.group(1).strip()
+    try:
+        if "[OPTIONS]" in content:
+            narrative, options= content.split("[OPTIONS]")
+            narrative = re.sub(r"(?i)^\s*\[NARRATIVE\]\s*", "", narrative).strip() or narrative
+            if DEBUG:
+                print(f"DEBUG: Extracted narrative for session {session_id}: {narrative}")
+                print(f"DEBUG: Extracted options for session {session_id}: {options}")
+        else:
+            raise ValueError("Content does not contain [OPTIONS] separator.")
+    except Exception as e:
+        print(f"DEBUG: Failed to extract narrative/options for session {session_id}: {e}")
 
     return {"narrative": narrative, "options": options}
 
@@ -398,7 +398,7 @@ async def chat(req: ChatRequest):
             })
             await store_memory_from_text(client, session_memory, "system", f"Attached roll: {roll_json}", [])
 
-        MAX_ITERATIONS = 100
+        MAX_ITERATIONS = 5
         narrative = ""
         options = ""
 
@@ -443,14 +443,14 @@ async def chat(req: ChatRequest):
                         }
                     elif config["name"] == "Groq":
                         payload = {
-                            "model": groq_model or "llama-3.3-70b-versatile",
+                            "model": groq_model,
                             "messages": full_messages,
                             "tools": GROQ_TOOLS,
                             "tool_choice": "auto",
                         }
                     else:
                         payload = {
-                            "model": config.get("model", "llama3.1"),
+                            "model": ollama_model,
                             "messages": full_messages,
                             "tools": GROQ_TOOLS,
                             "tool_choice": "auto",
@@ -475,7 +475,7 @@ async def chat(req: ChatRequest):
                             tool_result_text = ""
                             if func_call["name"] == "store_memory_from_text":
                                 parsed = extract_data(func_call["args"]["content"], room, session_id)
-                                narrative = parsed.get("narrative") or func_call["args"]["content"]
+                                narrative = parsed.get("narrative") or parse_state(func_call["args"]["content"])
                                 options = parsed.get("options") or ""
                                 await store_memory_from_text(
                                     client, session_memory, "assistant",
@@ -500,7 +500,7 @@ async def chat(req: ChatRequest):
                             content = part["text"]
                             await store_memory_from_text(client, session_memory, "user", req.message, [])
                             parsed = extract_data(content, room, session_id)
-                            narrative = parsed.get("narrative") or content
+                            narrative = parsed.get("narrative") or parse_state(content)
                             options = parsed.get("options") or ""
                             await store_memory_from_text(client, session_memory, "assistant", narrative, [])
                             break
@@ -512,7 +512,7 @@ async def chat(req: ChatRequest):
                             tool_result_text = ""
                             if func_call["name"] == "store_memory_from_text":
                                 parsed = extract_data(args["content"], room, session_id)
-                                narrative = parsed.get("narrative") or args["content"]
+                                narrative = parsed.get("narrative") or parse_state(args["content"])
                                 options = parsed.get("options") or ""
                                 await store_memory_from_text(
                                     client, session_memory, "assistant",
@@ -537,7 +537,7 @@ async def chat(req: ChatRequest):
                             content = message["content"]
                             await store_memory_from_text(client, session_memory, "user", req.message, [])
                             parsed = extract_data(content, room, session_id)
-                            narrative = parsed.get("narrative") or content
+                            narrative = parsed.get("narrative") or parse_state(content)
                             options = parsed.get("options") or ""
                             await store_memory_from_text(client, session_memory, "assistant", narrative, [])
                             break
